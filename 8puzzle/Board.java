@@ -4,6 +4,10 @@
  *  Description: This class create Board for 8Puzzle Assignment
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.Stack;
+
+import java.util.Arrays;
+
 public class Board {
 
     int[] board = null;
@@ -111,13 +115,115 @@ public class Board {
     // all neighboring boards
     public Iterable<Board> neighbors()
     {
-        
+
+        // index of blank tile
+        int indexOfZero = Arrays.asList(board).indexOf(0);
+
+        // get posible index positions
+        int[] positions = getPosiblePositions(indexOfZero);
+
+        Stack<Board> neigbours = new Stack<Board>();
+        // swap zero tile with the nearest tile
+        int[] boardCopy1;
+        for(int p:positions)
+        {
+            boardCopy1 = board.clone();
+
+            int temp = boardCopy1[p-1];
+            boardCopy1[p-1] = boardCopy1[indexOfZero];
+            boardCopy1[indexOfZero] = temp;
+            neigbours.push(new Board(getTwoDArray(boardCopy1)));
+        }
+        return neigbours;
     }
 
+    private int[][] getTwoDArray(int[] arr)
+    {
+        int[][] twodarr = new int[size][size];
+        for(int i = 0; i < size; i++)
+        {
+            for(int j = 0; j < size; j++)
+            {
+                twodarr[j][i] = arr[i * size + j];
+            }
+        }
+
+        return  twodarr;
+    }
+    // return array of swap positions
+    private int[] getPosiblePositions(int zeroTileIndex)
+    {
+       int[] pos = null;
+       int zeroTilePos =  zeroTileIndex + 1;
+       int d = zeroTilePos / size;
+       int r = zeroTilePos % size;
+       int i = 0;
+
+       // not the last column
+       if(r > 0)
+       {
+           pos[i] = i+1;
+           i++;
+       }
+
+       // not the first column
+       if(r > 1)
+       {
+           pos[i] = i+1;
+           i++;
+       }
+
+       // not the last row
+       if(d < size && r > 0)
+       {
+           pos[i] = i+size;
+           i++;
+       }
+
+       // not the first row
+        if(d > 1)
+        {
+            pos[i] = i - size;
+            i++;
+        }
+        return pos;
+    }
     // a board that is obtained by exchanging any pair of tiles
     public Board twin()
+    {
+        // index of blank tile
+        int indexOfZero = Arrays.asList(board).indexOf(0);
+        int d = indexOfZero + 1 / size ;
+        int r = indexOfZero + 1 % size;
+        int row = (r == 0)? d: d+1;
+
+        int tile1Index= 0;
+        int tile2Index = 0;
+
+        int i = -1;
+        if(row == 1)
+        {
+            i = row*size;
+
+        }else
+        {
+             i = (row - 1)*size;
+        }
+
+        tile1Index = i;
+        tile2Index = i+1;
+        // swap tiles
+        int[] boardCopy = board.clone();
+        int temp = boardCopy[tile1Index];
+        boardCopy[tile1Index] = boardCopy[tile2Index];
+        boardCopy[tile2Index] = temp;
+
+        return   new Board(getTwoDArray(boardCopy));
+    }
 
     // unit testing (not graded)
     public static void main(String[] args)
+    {
+    }
 
 }
