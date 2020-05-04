@@ -91,9 +91,11 @@ public class Board {
     // is this board the goal board?
     public boolean isGoal()
     {
-        for(int i=0; i< len; i++)
+        // checking i < len - 1 as the last
+        // index is 0 for the goal board
+        for(int i=0; i< len - 1; i++)
         {
-            if(i != board[i])
+            if(i+1 != board[i])
             {
                 return false;
             }
@@ -177,13 +179,13 @@ public class Board {
        int d = zeroTilePos / size;
        int r = zeroTilePos % size;
 
-       // not the last column
+       // not the last or first column
        if(r != 0 && r != 1)
        {
           pos.push(zeroTilePos-1);
            pos.push(zeroTilePos+1);
        }
-       else if(r == 1)
+       else if(r == 1)// first column
        {
            pos.push(zeroTilePos+1);
        }else{
@@ -196,9 +198,9 @@ public class Board {
            pos.push(zeroTilePos+size);
        }else if((d == size - 1 && r >0) ||(d == size && r == 0)) // last row
        {
-           pos.push(zeroTilePos-1);
+           pos.push(zeroTilePos-size);
        }else{
-           pos.push(zeroTilePos+1);
+           pos.push(zeroTilePos+size);
            pos.push(zeroTilePos-size);
        }
 
