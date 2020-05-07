@@ -219,7 +219,7 @@ public class Board {
         int i = -1;
         if(row == 1)
         {
-            i = size;
+            i = (row+1)*size;
 
         }else if(row == size)
         {
@@ -228,8 +228,8 @@ public class Board {
             i = 0;
         }
 
-        tile1Index = i;
-        tile2Index = i+1;
+        tile1Index = i-1;
+        tile2Index = i-2;
         // swap tiles
         int[] boardCopy = board.clone();
         int temp = boardCopy[tile1Index];
@@ -254,7 +254,7 @@ public class Board {
         {
             row = d;
         }else{
-            row = 0;
+            row = 1;
         }
 
         return row;
