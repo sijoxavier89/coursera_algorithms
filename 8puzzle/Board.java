@@ -10,9 +10,9 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
 
-    int[] board = null;
-    int len = 0;
-    int size = 0;
+    private int[] board;
+    private int len;
+    private int size;
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles)
@@ -21,12 +21,12 @@ public class Board {
         len = size*size;
         board = new int[len];
         int index = 0;
-        for(int i = 0; i<size; i++)
+        for (int i = 0; i < size; i++)
         {
-            for(int j=0; j<size;j++)
+            for (int j = 0; j < size; j++)
             {
                 board[index] = tiles[i][j];
-                index ++;
+                index++;
             }
         }
     }
@@ -39,7 +39,7 @@ public class Board {
         for (int i = 0; i < len; i++) {
 
             s.append(String.format("%2d ", board[i]));
-            if((i+1) % size == 0) {
+            if ((i+1) % size == 0) {
                 s.append("\n");
             }
         }
@@ -57,9 +57,9 @@ public class Board {
     public int hamming()
     {
         int numOutOfPlace = 0;
-        for(int i=0; i< len; i++)
+        for (int i = 0; i < len; i++)
         {
-            if(board[i] != 0) {
+            if (board[i] != 0) {
                 if (i + 1 != board[i]) {
                     numOutOfPlace++;
                 }
@@ -72,15 +72,12 @@ public class Board {
     public int manhattan()
     {
         int manhattanDistance = 0;
-         int rowdist = 0;
-         int coldist = 0;
-         int val = 0;
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
         {
-            if(board[i] != 0) {
-                val = i+1;
-                coldist = Math.abs(getColIndex(val) - getColIndex(board[i]));
-                rowdist = Math.abs(getRowIndex(val) - getRowIndex(board[i]));
+            if (board[i] != 0) {
+                int val = i + 1;
+                int coldist = Math.abs(getColIndex(val) - getColIndex(board[i]));
+                int rowdist = Math.abs(getRowIndex(val) - getRowIndex(board[i]));
                 manhattanDistance += coldist + rowdist;
             }
         }
@@ -88,14 +85,70 @@ public class Board {
         return  manhattanDistance;
     }
 
+    // get 1 based index of 2d table row
+    private int getRowIndex(int index)
+    {
+        int d = (index)/ size ;
+        int r = (index) % size;
+       // StdOut.println("d:");
+       // StdOut.println(d+"\n");
+        int row = -1;
+
+        if(d > 0 )
+        {
+            if (r > 0) {
+                row = d + 1;
+            }else{
+                row = d;
+            }
+        }else
+        {
+            row = 1;
+        }
+
+        return row;
+    }
+ // Test Row Index function
+    public void testRowIndex()
+    {
+        for(int n:board)
+        {
+            if(n != 0) {
+              //  StdOut.println(n+"\n");
+                String s = String.format(" %1$s-> row-%2$s", n,getRowIndex(n));
+                StdOut.println(s+"\n");
+            }
+        }
+    }
+
+    public void testColIndex()
+    {
+        for(int n:board)
+        {
+            if(n != 0) {
+                //  StdOut.println(n+"\n");
+                String s = String.format(" %1$s-> col-%2$s", n,getColIndex(n));
+                StdOut.println(s+"\n");
+            }
+        }
+    }
+    // return 1 based index of two-d column
+    private int getColIndex(int index)
+    {
+        int r = (index) % size;
+
+        int col = (r == 0)? size:r;
+
+        return col;
+    }
     // is this board the goal board?
     public boolean isGoal()
     {
         // checking i < len - 1 as the last
         // index is 0 for the goal board
-        for(int i=0; i< len - 1; i++)
+        for (int i =  0; i < len - 1; i++)
         {
-            if(i+1 != board[i])
+            if (i+1 != board[i])
             {
                 return false;
             }
@@ -111,9 +164,9 @@ public class Board {
         if (y.getClass() != this.getClass()) return false;
         Board that = (Board) y;
 
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
         {
-            if(that.board[i] != this.board[i])
+            if (that.board[i] != this.board[i])
             {
                 return false;
             }
@@ -135,10 +188,9 @@ public class Board {
 
         Stack<Board> neigbours = new Stack<Board>();
         // swap zero tile with the nearest tile
-        int[] boardCopy1;
-        for(int p:positions)
+        for (int p:positions)
         {
-            boardCopy1 = board.clone();
+            int[] boardCopy1 = board.clone();
 
             int temp = boardCopy1[p-1];
             boardCopy1[p-1] = boardCopy1[indexOfZero];
@@ -151,9 +203,9 @@ public class Board {
     // Get the 0 based index of tile 0
     private int getIndexZero(int[] b)
     {
-       for(int i=0;i< len; i++)
+       for (int i = 0; i < len; i++)
        {
-           if(b[i] == 0)
+           if (b[i] == 0)
                return i;
        }
        return -1;
@@ -161,9 +213,9 @@ public class Board {
     private int[][] getTwoDArray(int[] arr)
     {
         int[][] twodarr = new int[size][size];
-        for(int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
-            for(int j = 0; j < size; j++)
+            for (int j = 0; j < size; j++)
             {
                 twodarr[i][j] = arr[i * size + j];
             }
@@ -180,30 +232,29 @@ public class Board {
        int r = zeroTilePos % size;
 
        // not the last or first column
-       if(r != 0 && r != 1)
+       if (r != 0 && r != 1)
        {
           pos.push(zeroTilePos-1);
            pos.push(zeroTilePos+1);
        }
-       else if(r == 1)// first column
+       else if (r == 1)// first column
        {
            pos.push(zeroTilePos+1);
-       }else{
+       } else {
            pos.push(zeroTilePos-1);
        }
 
        // first row
-       if((d == 1 && r == 0)|| (d == 0 && r > 0))
+       if ((d == 1 && r == 0) || (d == 0 && r > 0))
        {
            pos.push(zeroTilePos+size);
-       }else if((d == size - 1 && r >0) ||(d == size && r == 0)) // last row
+       } else if ((d == size - 1 && r > 0) || (d == size && r == 0)) // last row
        {
            pos.push(zeroTilePos-size);
-       }else{
+       } else {
            pos.push(zeroTilePos+size);
            pos.push(zeroTilePos-size);
        }
-
         return pos;
     }
     // a board that is obtained by exchanging any pair of tiles
@@ -213,8 +264,8 @@ public class Board {
         int indexOfZero = getIndexZero(board);
         int row = getRowIndex(indexOfZero);
 
-        int tile1Index= 0;
-        int tile2Index = 0;
+        int tile1Index;
+        int tile2Index;
 
         int i = -1;
         if(row == 1)
@@ -239,36 +290,7 @@ public class Board {
         return   new Board(getTwoDArray(boardCopy));
     }
 
-    // get 1 based index of 2d table row
-    private int getRowIndex(int index)
-    {
-        int d = (index + 1 )/ size ;
-        int r = (index + 1) % size;
 
-        int row = -1;
-
-        if(d > 0 && r > 0)
-        {
-            row = d-1;
-        }else if(d > 0 && r == 0)
-        {
-            row = d;
-        }else{
-            row = 1;
-        }
-
-        return row;
-    }
-
-    // return 1 based index of two-d column
-    private int getColIndex(int index)
-    {
-        int r = (index + 1) % size;
-
-        int col = (r % size == 0)? size:r;
-
-        return col;
-    }
     // unit testing (not graded)
     public static void main(String[] args)
     {
@@ -284,7 +306,12 @@ public class Board {
             StdOut.println("Board\n");
             StdOut.println(initial);
 
-         StdOut.println("Dimension\n");
+      //   StdOut.println("Dimension\n");
+       // StdOut.println(initial.dimension());
+
+       // StdOut.println("Test Row & column\n");
+       // initial.testRowIndex();
+        //initial.testColIndex();
         StdOut.println(initial.dimension());
 
         StdOut.println("Hamming\n");
@@ -293,10 +320,10 @@ public class Board {
         StdOut.println("Manhattan\n");
         StdOut.println(initial.manhattan());
 
-        StdOut.println("neigbours\n");
+       // StdOut.println("neigbours\n");
         for(Board nb:initial.neighbors())
         {
-            StdOut.println(nb);
+           StdOut.println(nb);
         }
 
         StdOut.println("Twin\n");
