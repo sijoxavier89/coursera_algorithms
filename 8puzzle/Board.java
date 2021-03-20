@@ -108,30 +108,9 @@ public class Board {
 
         return row;
     }
- // Test Row Index function
-    public void testRowIndex()
-    {
-        for(int n:board)
-        {
-            if(n != 0) {
-              //  StdOut.println(n+"\n");
-                String s = String.format(" %1$s-> row-%2$s", n,getRowIndex(n));
-                StdOut.println(s+"\n");
-            }
-        }
-    }
 
-    public void testColIndex()
-    {
-        for(int n:board)
-        {
-            if(n != 0) {
-                //  StdOut.println(n+"\n");
-                String s = String.format(" %1$s-> col-%2$s", n,getColIndex(n));
-                StdOut.println(s+"\n");
-            }
-        }
-    }
+
+
     // return 1 based index of two-d column
     private int getColIndex(int index)
     {
@@ -163,6 +142,8 @@ public class Board {
         if (y == null) return false;
         if (y.getClass() != this.getClass()) return false;
         Board that = (Board) y;
+
+        if(((Board) y).len != this.len) return false;
 
         for (int i = 0; i < len; i++)
         {
@@ -260,27 +241,30 @@ public class Board {
     // a board that is obtained by exchanging any pair of tiles
     public Board twin()
     {
-        // index of blank tile
+        // o based index of blank tile
         int indexOfZero = getIndexZero(board);
-        int row = getRowIndex(indexOfZero);
+        // 1 based index
+        int actualIndex = indexOfZero+1;
+        int rowOfZero = getRowIndex(actualIndex);
 
         int tile1Index;
         int tile2Index;
 
-        int i = -1;
-        if(row == 1)
+        int locationOfTiles = -1;
+        if(rowOfZero == 1) // first row
         {
-            i = (row+1)*size;
+            // take next row for swap
+            locationOfTiles = (rowOfZero+1)*size;
 
-        }else if(row == size)
+        }else if(rowOfZero == size) // last row
         {
-             i = (row - 1)*size;
+            locationOfTiles = (rowOfZero - 1)*size;
         }else{
-            i = 0;
+            locationOfTiles = size;
         }
 
-        tile1Index = i-1;
-        tile2Index = i-2;
+        tile1Index = locationOfTiles  - 1;
+        tile2Index = locationOfTiles - 2 ;
         // swap tiles
         int[] boardCopy = board.clone();
         int temp = boardCopy[tile1Index];

@@ -48,7 +48,16 @@ public class PuzzleChecker {
             // solve the slider puzzle
             Board initial = new Board(tiles);
             Solver solver = new Solver(initial);
-            StdOut.println(filename + ": " + solver.moves());
+            if(solver.isSolvable()) {
+                int moves = solver.moves();
+                StdOut.println(filename + ": " + moves);
+                for (Board b : solver.solution()) {
+                    StdOut.print(b);
+                }
+            }else {
+                StdOut.println("Unsolvable");
+            }
+            }
         }
     }
-}
+

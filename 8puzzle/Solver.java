@@ -10,99 +10,151 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-    //private Board board;
     private MinPQ<SearchNode> minPq = new MinPQ<SearchNode>();
+    private MinPQ<SearchNode> minPqTwin = new MinPQ<SearchNode>();
     private int moves;
-    private boolean isTwinSolvable = false;
     private SearchNode finalNode;
+    private SearchNode finalNodeTwin;
+
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial)
     {
+        if (initial == null)
+        {
+            throw new IllegalArgumentException();
+        }
        // this.board = initial;
         SearchNode searchNode = new SearchNode(initial,0,null);
         minPq.insert(searchNode);
-        runSolver(initial);
+
+        // Twin
+        SearchNode searchNodeTwin = new SearchNode(initial.twin(),0,null);
+        minPqTwin.insert(searchNodeTwin);
+        // Run
+        runSolver();
 
     }
 
-    private void runSolver(Board initial)
+    private void runSolver()
     {
-        while (!solveBoard(initial)||!solveTwin(initial));
+        while (!solveBoard());
     }
-    private boolean solveBoard(Board board)
+    private boolean solveBoard()
     {
-        return solve(board);
+        return solve();
     }
 
-    private  boolean solveTwin(Board board)
-    {
-        isTwinSolvable = solve(board.twin());
-        return true;
-    }
-    private boolean solve(Board board)
+
+    private boolean solve()
     {
         SearchNode dqNode = minPq.delMin();
-        while(!dqNode.board.isGoal())
+        SearchNode dqNodeTwin = minPqTwin.delMin();
+         int count = 0;
+        while(!dqNode.board.isGoal() && !dqNodeTwin.board.isGoal())
         {
+            count++;
+
             Iterable<Board> neighbours = dqNode.board.neighbors();
-            moves++;
+            Iterable<Board> neighboursTwin = dqNodeTwin.board.neighbors();
+
             for(Board b: neighbours)
             {
                 if(!b.equals(dqNode.board)) {
-                    minPq.insert(new SearchNode(b, moves, dqNode));
+                    minPq.insert(new SearchNode(b, dqNode.movesNum+1, dqNode));
+
                 }
             }
+
+            //Twin
+            for(Board b: neighboursTwin)
+            {
+                if(!b.equals(dqNodeTwin.board)) {
+                    minPqTwin.insert(new SearchNode(b, moves, dqNodeTwin));
+                }
+            }
+
+
             dqNode = minPq.delMin();
+            dqNodeTwin = minPqTwin.delMin();
         }
         finalNode = dqNode;
+        finalNodeTwin = dqNodeTwin;
         return true;
     }
     // is the initial board solvable? (see below)
     public boolean isSolvable(){
-        return !isTwinSolvable;
+        return !finalNodeTwin.board.isGoal();
     }
 
     // min number of moves to solve initial board
     public int moves()
     {
-        return moves;
+        if (isSolvable())
+        return finalNode.movesNum;
+        else
+            return -1;
     }
 
-    // sequence of boards in a shortest solution
+
     public Iterable<Board> solution()
     {
-        Stack<Board> solution = new Stack<Board>();
-        SearchNode current = finalNode;
-        while(current != null)
-        {
-            solution.push(current.board);
-            current = current.previous;
-        }
+        if (isSolvable()) {
+            Stack<Board> solution = new Stack<Board>();
+            SearchNode current = finalNode;
+            while (current != null) {
+                solution.push(current.board);
+                current = current.previous;
+            }
 
-        return solution;
+            return solution;
+        }else {
+            return null;
+        }
     }
 
     private class SearchNode implements Comparable<SearchNode> {
         public SearchNode(Board board, int moves, SearchNode previous)
         {
             this.board = board;
-            this.moves = moves;
+            this.movesNum = moves;
             this.previous = previous;
+            this.manhattanDistance = manhattanDistance();
+            this.priority = manhattanPriorityFunc();
         }
         SearchNode previous;
         Board board;
+        private int priority;
+        private int manhattanDistance;
         // number moves made to reach board
-        int moves;
-        public int manhattanPriority() {
-            int manhattanFunc = board.manhattan() + moves;
+         int movesNum;
+        private int manhattanPriorityFunc() {
+            int manhattanFunc = board.manhattan() + movesNum;
             return manhattanFunc;
+        }
+
+        private int manhattanDistance()
+        {
+            return board.manhattan();
+        }
+        private int manhattanPriority()
+        {
+            return this.priority;
         }
         public int compareTo(SearchNode o) {
             if(this.manhattanPriority() > o.manhattanPriority())
                 return 1;
             else if(this.manhattanPriority() < o.manhattanPriority())
                 return -1;
-            else return 0;
+            else {
+                if(this.manhattanDistance > o.manhattanDistance)
+                {
+                    return 1;
+                }else if(this.manhattanDistance < o.manhattanDistance)
+                {
+                    return -1;
+                }
+                return 0;
+            }
         }
     }
     // test client (see below)
