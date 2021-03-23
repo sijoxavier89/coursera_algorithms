@@ -10,11 +10,11 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-    private MinPQ<SearchNode> minPq = new MinPQ<SearchNode>();
-    private MinPQ<SearchNode> minPqTwin = new MinPQ<SearchNode>();
-    private int moves;
+    private final MinPQ<SearchNode> minPq = new MinPQ<SearchNode>();
+    private final MinPQ<SearchNode> minPqTwin = new MinPQ<SearchNode>();
     private SearchNode finalNode;
     private SearchNode finalNodeTwin;
+    private final boolean isSolveble;
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial)
@@ -23,7 +23,7 @@ public class Solver {
         {
             throw new IllegalArgumentException();
         }
-       // this.board = initial;
+
         SearchNode searchNode = new SearchNode(initial,0,null);
         minPq.insert(searchNode);
 
@@ -32,44 +32,45 @@ public class Solver {
         minPqTwin.insert(searchNodeTwin);
         // Run
         runSolver();
-
+        isSolveble = !finalNodeTwin.board.isGoal();
     }
 
     private void runSolver()
     {
-        while (!solveBoard());
+        solve();
     }
-    private boolean solveBoard()
-    {
-        return solve();
-    }
-
 
     private boolean solve()
     {
         SearchNode dqNode = minPq.delMin();
         SearchNode dqNodeTwin = minPqTwin.delMin();
-         int count = 0;
         while(!dqNode.board.isGoal() && !dqNodeTwin.board.isGoal())
         {
-            count++;
 
             Iterable<Board> neighbours = dqNode.board.neighbors();
-            Iterable<Board> neighboursTwin = dqNodeTwin.board.neighbors();
 
             for(Board b: neighbours)
             {
-                if(!b.equals(dqNode.board)) {
-                    minPq.insert(new SearchNode(b, dqNode.movesNum+1, dqNode));
+                if(dqNode.previous != null ) {
+                    if (!b.equals(dqNode.previous.board)) {
+                        minPq.insert(new SearchNode(b, dqNode.movesNum + 1, dqNode));
 
+                    }
+                }else{
+                    minPq.insert(new SearchNode(b, dqNode.movesNum + 1, dqNode));
                 }
             }
 
             //Twin
+            Iterable<Board> neighboursTwin = dqNodeTwin.board.neighbors();
             for(Board b: neighboursTwin)
             {
-                if(!b.equals(dqNodeTwin.board)) {
-                    minPqTwin.insert(new SearchNode(b, moves, dqNodeTwin));
+                if(dqNodeTwin.previous != null) {
+                    if (!b.equals(dqNodeTwin.previous.board)) {
+                        minPqTwin.insert(new SearchNode(b, dqNodeTwin.movesNum + 1, dqNodeTwin));
+                    }
+                }else{
+                    minPqTwin.insert(new SearchNode(b, dqNodeTwin.movesNum + 1, dqNodeTwin));
                 }
             }
 
@@ -83,7 +84,7 @@ public class Solver {
     }
     // is the initial board solvable? (see below)
     public boolean isSolvable(){
-        return !finalNodeTwin.board.isGoal();
+        return isSolveble;
     }
 
     // min number of moves to solve initial board
@@ -123,8 +124,8 @@ public class Solver {
         }
         SearchNode previous;
         Board board;
-        private int priority;
-        private int manhattanDistance;
+        private final int priority;
+        private final int manhattanDistance;
         // number moves made to reach board
          int movesNum;
         private int manhattanPriorityFunc() {

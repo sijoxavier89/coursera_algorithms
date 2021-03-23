@@ -10,9 +10,9 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
 
-    private int[] board;
-    private int len;
-    private int size;
+    private final int[] board;
+    private final int len;
+    private final int size;
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles)
