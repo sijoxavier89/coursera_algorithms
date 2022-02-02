@@ -2,55 +2,243 @@
  *  Name: Sijo Xavier
  *  Date: 15-jan-2022
  *  Description:Build BST with points in the nodes, using x and y crdinates of the points as keys
- * in strictly alternating sequence
+ *  in strictly alternating sequence
  *  Search and insert
  *  Draw
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 public class KdTree {
+    // private boolean dividebyX = true;
+    private Node root;
+    private int size;
+
+    public KdTree() {
+
+    }
+
+    private static class Node {
+        private Point2D p;    // the point
+        private RectHV rect;  // the axis aligned rectangle corresponding to this node
+        private Node lb;      // the left/bottom subtree
+        private Node rt;      // the right/top subtree
+
+        public Node(Point2D p, RectHV rect) {
+            this.p = p;
+            this.rect = rect;
+        }
+
+    }
+
 
     public boolean isEmpty()                      // is the set empty?
     {
-        return false;
+        return size == 0;
     }
 
     public int size()                         // number of points in the set
     {
-        return 0;
+        return size;
     }
 
     public void insert(
             Point2D p)              // add the point to the set (if it is not already in the set)
     {
+        put(p);
+    }
 
+    /**
+     * Inserts the specified key-value pair into the symbol table, overwriting the old
+     * value with the new value if the symbol table already contains the specified key.
+     * Deletes the specified key (and its associated value) from this symbol table
+     * if the specified value is {@code null}.
+     *
+     * @param p the Point in the 2D plane
+     * @throws IllegalArgumentException if {@code key} is {@code null}
+     */
+    public void put(Point2D p) {
+
+        if (p == null) throw new IllegalArgumentException("calls put() with a null key");
+
+        root = put(root, p, true, new RectHV(0, 0, 1, 1));
+
+    }
+
+    private Node put(Node x, Point2D p, boolean dividebyX, RectHV rect) {
+        if (x == null) {
+            size = size + 1; // update tree size
+            return new Node(p, rect);
+        }
+        int cmp = 0;
+        if (dividebyX) {
+            if (p.x() > x.p.x()) cmp = 1;
+            else if (p.x() < x.p.x()) cmp = -1;
+        }
+        else {
+            if (p.y() > x.p.y()) cmp = 1;
+            else if (p.y() < x.p.y()) cmp = -1;
+        }
+
+        if (cmp < 0) {
+            if (dividebyX)
+                x.lb = put(x.lb, p, !dividebyX,
+                           new RectHV(rect.xmin(), rect.ymin(), x.p.x(), rect.ymax()));
+            else x.lb = put(x.lb, p, !dividebyX,
+                            new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), x.p.y()));
+        }
+        else if (cmp > 0) {
+            if (dividebyX)
+                x.rt = put(x.rt, p, !dividebyX,
+                           new RectHV(x.p.x(), rect.ymin(), rect.xmax(), rect.ymax()));
+            else x.rt = put(x.rt, p, !dividebyX,
+                            new RectHV(rect.xmin(), x.p.y(), rect.xmax(), rect.ymax()));
+        }
+        else x.p = p;
+
+        return x;
     }
 
     public boolean contains(Point2D p)            // does the set contain point p?
     {
-        return false;
+        Point2D x = get(p);
+        return x != null;
     }
 
-    public void draw()                         // draw all points to standard draw
-    {
-
+    /**
+     * Returns the value associated with the given key.
+     *
+     * @param p the point in the 2D plane
+     * @return the value associated with the given key if the key is in the symbol table
+     * and {@code null} if the key is not in the symbol table
+     * @throws IllegalArgumentException if {@code key} is {@code null}
+     */
+    public Point2D get(Point2D p) {
+        return get(root, p, true);
     }
 
+    private Point2D get(Node x, Point2D p, boolean dividebyX) {
+        if (p == null) throw new IllegalArgumentException("calls get() with a null key");
+        if (x == null) return null;
+        int cmp = 0;
+        if (dividebyX) {
+            if (p.x() > x.p.x()) cmp = 1;
+            else if (p.x() < x.p.x()) cmp = -1;
+        }
+        else {
+            if (p.y() > x.p.y()) cmp = 1;
+            else if (p.y() < x.p.y()) cmp = -1;
+        }
+
+
+        if (cmp < 0) return get(x.lb, p, !dividebyX);
+        else if (cmp > 0) return get(x.rt, p, !dividebyX);
+        else return x.p;
+    }
+
+    // draw all points to standard draw
+    public void draw() {
+        draw(root, true);
+    }
+
+    private void draw(Node x, boolean divideByX) {
+        if (x == null) return;
+
+        draw(x.lb, !divideByX);
+        draw(x.rt, !divideByX);
+        // draw point
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.01);
+        StdDraw.point(x.p.x(), x.p.y());
+
+        // draw split by x line
+        if (divideByX) {
+            StdDraw.setPenRadius(0.002);
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.line(x.p.x(), x.rect.ymin(), x.p.x(), x.rect.ymax());
+        }
+        else {
+            // draw split by y line
+            StdDraw.setPenRadius(0.002);
+            StdDraw.setPenColor(StdDraw.BLUE);
+            StdDraw.line(x.rect.xmin(), x.p.y(), x.rect.xmax(), x.p.y());
+        }
+    }
+
+    // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(
-            RectHV rect)             // all points that are inside the rectangle (or on the boundary)
-    {
-        return null;
+            RectHV rect) {
+        Queue<Point2D> points = new Queue<Point2D>();
+        search(rect, root, points);
+        return points;
     }
 
+    // If a query reactangle does not intersect the corresponding to a node, there is no need to explore
+    // that node. A subtree is only searched if it might conatain a point contained in the query rectangle
+    private void search(RectHV rect, Node x, Queue<Point2D> points) {
+        if (x == null) return;
+        if (rect.contains(x.p)) points.enqueue(x.p);
+        if ((x.lb != null) && x.lb.rect.intersects(rect)) search(rect, x.lb, points);
+        if ((x.rt != null) && x.rt.rect.intersects(rect)) search(rect, x.rt, points);
+
+    }
+
+    // if the closest point discovered so far is closer than the distance between the query point and
+    // the rectangle corresponding to a node, there is no need to explore that node (or its subtrees).
+    // That is, search a node only only if it might contain a point that is closer than the best one found so far.
+    // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(
-            Point2D p)             // a nearest neighbor in the set to point p; null if the set is empty
-    {
-        return null;
+            Point2D p) {
+        return nearest(root, Double.POSITIVE_INFINITY, root.p, p);
+    }
+
+    private Point2D nearest(Node x, double distTo, Point2D nearestP, Point2D target) {
+        if (x == null) return null;
+        if (target.distanceSquaredTo(x.p) < distTo) {
+            nearestP = x.p;
+            distTo = target.distanceSquaredTo(x.p);
+
+        }
+
+        if (x.lb != null && x.lb.rect.distanceSquaredTo(target) < distTo)
+            return nearest(x.lb, distTo, nearestP, target);
+        if (x.rt != null && x.rt.rect.distanceSquaredTo(target) < distTo)
+            return nearest(x.rt, distTo, nearestP, target);
+
+        return nearestP;
     }
 
     public static void main(String[] args) {
+
+        KdTree tree = new KdTree();
+        int size = tree.size();
+
+        StdOut.println(size);
+        StdOut.println("insert 4 points");
+        Point2D p1 = new Point2D(0.7, 0.2);
+        Point2D p2 = new Point2D(0.5, 0.4);
+        Point2D p3 = new Point2D(0.2, 0.3);
+        Point2D p4 = new Point2D(0.4, 0.7);
+        Point2D p5 = new Point2D(0.9, 0.6);
+        tree.insert(p1);
+        tree.insert(p2);
+        tree.insert(p3);
+        tree.insert(p4);
+        tree.insert(p5);
+        StdOut.println("size");
+        StdOut.println(tree.size());
+        StdOut.println("contains");
+        StdOut.println(tree.contains(p4));
+        Point2D nearest = tree.nearest(new Point2D(0.6, 0.1));
+        StdOut.println(nearest.toString());
+        Point2D nearest2 = tree.nearest(new Point2D(0.1, 0.1));
+        StdOut.println(nearest2.toString());
+        tree.draw();
+
 
     }
 

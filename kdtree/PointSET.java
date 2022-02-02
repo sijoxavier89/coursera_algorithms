@@ -9,6 +9,7 @@ import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 public class PointSET {
     private SET<Point2D> set;
@@ -43,7 +44,11 @@ public class PointSET {
 
     public void draw()                         // draw all points to standard draw
     {
-        for (Point2D p : set) StdDraw.point(p.x(), p.y());
+        for (Point2D p : set) {
+            StdDraw.setPenColor(StdDraw.BLACK);
+            StdDraw.setPenRadius(0.01);
+            StdDraw.point(p.x(), p.y());
+        }
     }
 
     public Iterable<Point2D> range(
@@ -53,7 +58,7 @@ public class PointSET {
 
         Queue<Point2D> q = new Queue<Point2D>();
         for (Point2D p : set) {
-            if (containsIn(rect, p)) {
+            if (rect.contains(p)) {
                 q.enqueue(p);
             }
         }
@@ -61,12 +66,6 @@ public class PointSET {
         return q;
     }
 
-    private boolean containsIn(RectHV rect, Point2D p) {
-
-        boolean contains = (p.x() >= rect.xmin()) && (p.y() >= rect.ymin()) && (p.x() <= rect
-                .xmax()) && (p.y() <= rect.ymax());
-        return contains;
-    }
 
     public Point2D nearest(
             Point2D p)             // a nearest neighbor in the set to point p; null if the set is empty
@@ -77,15 +76,40 @@ public class PointSET {
 
         Point2D nearest = null;
         for (Point2D p1 : set) {
-            if (p1.distanceTo(p) < distance) {
+            if (p1.distanceSquaredTo(p) < distance) {
                 nearest = p;
-                distance = p1.distanceTo(p);
+                distance = p1.distanceSquaredTo(p);
             }
         }
         return nearest;
     }
 
     public static void main(String[] args) {
+
+        PointSET brute = new PointSET();
+        int size = brute.size();
+
+        StdOut.println(size);
+        StdOut.println("insert 4 points");
+        Point2D p1 = new Point2D(0.7, 0.2);
+        Point2D p2 = new Point2D(0.5, 0.4);
+        Point2D p3 = new Point2D(0.2, 0.3);
+        Point2D p4 = new Point2D(0.4, 0.7);
+        Point2D p5 = new Point2D(0.9, 0.6);
+        brute.insert(p1);
+        brute.insert(p2);
+        brute.insert(p3);
+        brute.insert(p4);
+        brute.insert(p5);
+        StdOut.println("size");
+        StdOut.println(brute.size());
+        StdOut.println("contains");
+        StdOut.println(brute.contains(p4));
+        Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
+        StdOut.println(nearest.toString());
+        Point2D nearest2 = brute.nearest(new Point2D(0.1, 0.1));
+        StdOut.println(nearest2.toString());
+        brute.draw();
 
     }
 }
