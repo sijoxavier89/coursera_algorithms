@@ -4,6 +4,7 @@
  *  Description: Represents the set of points in the unit square
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
@@ -86,25 +87,23 @@ public class PointSET {
 
     public static void main(String[] args) {
 
+        // initialize the data structures from file
+        String filename = args[0];
+        In in = new In(filename);
         PointSET brute = new PointSET();
-        int size = brute.size();
 
-        StdOut.println(size);
-        StdOut.println("insert 4 points");
-        Point2D p1 = new Point2D(0.7, 0.2);
-        Point2D p2 = new Point2D(0.5, 0.4);
-        Point2D p3 = new Point2D(0.2, 0.3);
-        Point2D p4 = new Point2D(0.4, 0.7);
-        Point2D p5 = new Point2D(0.9, 0.6);
-        brute.insert(p1);
-        brute.insert(p2);
-        brute.insert(p3);
-        brute.insert(p4);
-        brute.insert(p5);
+        while (!in.isEmpty()) {
+            double x = in.readDouble();
+            double y = in.readDouble();
+            Point2D p = new Point2D(x, y);
+
+            brute.insert(p);
+        }
+
         StdOut.println("size");
         StdOut.println(brute.size());
-        StdOut.println("contains");
-        StdOut.println(brute.contains(p4));
+        // StdOut.println("contains");
+        // StdOut.println(brute.contains(p4));
         Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
         StdOut.println(nearest.toString());
         Point2D nearest2 = brute.nearest(new Point2D(0.1, 0.1));

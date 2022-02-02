@@ -7,6 +7,7 @@
  *  Draw
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
@@ -91,14 +92,13 @@ public class KdTree {
             else x.lb = put(x.lb, p, !dividebyX,
                             new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), x.p.y()));
         }
-        else if (cmp > 0) {
+        else {
             if (dividebyX)
                 x.rt = put(x.rt, p, !dividebyX,
                            new RectHV(x.p.x(), rect.ymin(), rect.xmax(), rect.ymax()));
             else x.rt = put(x.rt, p, !dividebyX,
                             new RectHV(rect.xmin(), x.p.y(), rect.xmax(), rect.ymax()));
         }
-        else x.p = p;
 
         return x;
     }
@@ -136,8 +136,8 @@ public class KdTree {
 
 
         if (cmp < 0) return get(x.lb, p, !dividebyX);
-        else if (cmp > 0) return get(x.rt, p, !dividebyX);
-        else return x.p;
+        else return get(x.rt, p, !dividebyX);
+        // else return x.p;
     }
 
     // draw all points to standard draw
@@ -213,26 +213,23 @@ public class KdTree {
     }
 
     public static void main(String[] args) {
-
+        // initialize the data structures from file
+        String filename = args[0];
+        In in = new In(filename);
+        // PointSET brute = new PointSET();
         KdTree tree = new KdTree();
-        int size = tree.size();
+        while (!in.isEmpty()) {
+            double x = in.readDouble();
+            double y = in.readDouble();
+            Point2D p = new Point2D(x, y);
+            tree.insert(p);
+            
+        }
 
-        StdOut.println(size);
-        StdOut.println("insert 4 points");
-        Point2D p1 = new Point2D(0.7, 0.2);
-        Point2D p2 = new Point2D(0.5, 0.4);
-        Point2D p3 = new Point2D(0.2, 0.3);
-        Point2D p4 = new Point2D(0.4, 0.7);
-        Point2D p5 = new Point2D(0.9, 0.6);
-        tree.insert(p1);
-        tree.insert(p2);
-        tree.insert(p3);
-        tree.insert(p4);
-        tree.insert(p5);
         StdOut.println("size");
         StdOut.println(tree.size());
-        StdOut.println("contains");
-        StdOut.println(tree.contains(p4));
+        // StdOut.println("contains");
+        // StdOut.println(tree.contains(p4));
         Point2D nearest = tree.nearest(new Point2D(0.6, 0.1));
         StdOut.println(nearest.toString());
         Point2D nearest2 = tree.nearest(new Point2D(0.1, 0.1));
