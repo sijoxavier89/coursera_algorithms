@@ -78,7 +78,7 @@ public class PointSET {
         Point2D nearest = null;
         for (Point2D p1 : set) {
             if (p1.distanceSquaredTo(p) < distance) {
-                nearest = p;
+                nearest = p1;
                 distance = p1.distanceSquaredTo(p);
             }
         }
@@ -104,9 +104,9 @@ public class PointSET {
         StdOut.println(brute.size());
         // StdOut.println("contains");
         // StdOut.println(brute.contains(p4));
-        Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
-        StdOut.println(nearest.toString());
-        Point2D nearest2 = brute.nearest(new Point2D(0.1, 0.1));
+        // Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
+        // StdOut.println(nearest.toString());
+        Point2D nearest2 = brute.nearest(new Point2D(1, 1));
         StdOut.println(nearest2.toString());
         brute.draw();
 

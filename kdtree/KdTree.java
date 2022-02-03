@@ -15,9 +15,10 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
 public class KdTree {
-    // private boolean dividebyX = true;
     private Node root;
     private int size;
+    private Point2D champion;
+    private double championDist;
 
     public KdTree() {
 
@@ -62,7 +63,7 @@ public class KdTree {
      * @param p the Point in the 2D plane
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-    public void put(Point2D p) {
+    private void put(Point2D p) {
 
         if (p == null) throw new IllegalArgumentException("calls put() with a null key");
 
@@ -117,7 +118,7 @@ public class KdTree {
      * and {@code null} if the key is not in the symbol table
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-    public Point2D get(Point2D p) {
+    private Point2D get(Point2D p) {
         return get(root, p, true);
     }
 
@@ -193,23 +194,59 @@ public class KdTree {
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(
             Point2D p) {
-        return nearest(root, Double.POSITIVE_INFINITY, root.p, p);
+        champion = root.p;
+        championDist = Double.POSITIVE_INFINITY;
+        nearest(root, p, true);
+        return champion;
     }
 
-    private Point2D nearest(Node x, double distTo, Point2D nearestP, Point2D target) {
-        if (x == null) return null;
-        if (target.distanceSquaredTo(x.p) < distTo) {
-            nearestP = x.p;
-            distTo = target.distanceSquaredTo(x.p);
+    private void nearest(Node x, Point2D target, boolean dividebyX) {
+        if (x == null) return;
+        if (x.rect.distanceSquaredTo(target) > championDist) return;
 
+        if (target.distanceSquaredTo(x.p) < championDist) {
+            champion = x.p;
+            championDist = target.distanceSquaredTo(x.p);
         }
+        if (dividebyX) {
+            double xlb = 0;
+            double xrt = 0;
+            if (x.lb != null) {
+                xlb = Math.abs(x.p.x() - x.lb.p.x());
+            }
+            if (x.rt != null) {
+                xrt = Math.abs(x.p.x() - x.rt.p.x());
+            }
 
-        if (x.lb != null && x.lb.rect.distanceSquaredTo(target) < distTo)
-            return nearest(x.lb, distTo, nearestP, target);
-        if (x.rt != null && x.rt.rect.distanceSquaredTo(target) < distTo)
-            return nearest(x.rt, distTo, nearestP, target);
+            if (xlb < xrt) {
+                nearest(x.lb, target, !dividebyX);
+                nearest(x.rt, target, !dividebyX);
+            }
+            else {
+                nearest(x.rt, target, !dividebyX);
+                nearest(x.lb, target, !dividebyX);
+            }
+        }
+        else {
+            double ylb = 0;
+            double yrt = 0;
+            if (x.lb != null) {
+                ylb = Math.abs(x.p.y() - x.lb.p.y());
+            }
+            if (x.rt != null) {
+                yrt = Math.abs(x.p.y() - x.rt.p.y());
+            }
 
-        return nearestP;
+            if (ylb < yrt) {
+                nearest(x.lb, target, !dividebyX);
+                nearest(x.rt, target, !dividebyX);
+            }
+            else {
+                nearest(x.rt, target, !dividebyX);
+                nearest(x.lb, target, !dividebyX);
+            }
+        }
+        
     }
 
     public static void main(String[] args) {
@@ -223,16 +260,16 @@ public class KdTree {
             double y = in.readDouble();
             Point2D p = new Point2D(x, y);
             tree.insert(p);
-            
+
         }
 
         StdOut.println("size");
         StdOut.println(tree.size());
         // StdOut.println("contains");
         // StdOut.println(tree.contains(p4));
-        Point2D nearest = tree.nearest(new Point2D(0.6, 0.1));
+        Point2D nearest = tree.nearest(new Point2D(0, 0));
         StdOut.println(nearest.toString());
-        Point2D nearest2 = tree.nearest(new Point2D(0.1, 0.1));
+        Point2D nearest2 = tree.nearest(new Point2D(1, 1));
         StdOut.println(nearest2.toString());
         tree.draw();
 
