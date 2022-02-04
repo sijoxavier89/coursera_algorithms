@@ -7,10 +7,12 @@
  *  Draw
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 public class KdTree {
     private Node root;
@@ -104,6 +106,7 @@ public class KdTree {
 
     public boolean contains(Point2D p)            // does the set contain point p?
     {
+        if (root == null) return false;
         Point2D x = get(p);
         return x != null;
     }
@@ -173,6 +176,7 @@ public class KdTree {
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(
             RectHV rect) {
+        if (rect == null) throw new IllegalArgumentException();
         Queue<Point2D> points = new Queue<Point2D>();
         search(rect, root, points);
         return points;
@@ -194,6 +198,8 @@ public class KdTree {
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(
             Point2D p) {
+        if (p == null) throw new IllegalArgumentException();
+        if (root == null) return null;
         champion = root.p;
         championDist = Double.POSITIVE_INFINITY;
         nearest(root, p, true);
@@ -208,14 +214,16 @@ public class KdTree {
             champion = x.p;
             championDist = target.distanceSquaredTo(x.p);
         }
+        // test
+        // StdOut.println(x.p.toString());
         if (dividebyX) {
             double xlb = 0;
             double xrt = 0;
             if (x.lb != null) {
-                xlb = Math.abs(x.p.x() - x.lb.p.x());
+                xlb = Math.abs(target.x() - x.lb.p.x());
             }
             if (x.rt != null) {
-                xrt = Math.abs(x.p.x() - x.rt.p.x());
+                xrt = Math.abs(target.x() - x.rt.p.x());
             }
 
             if (xlb < xrt) {
@@ -231,10 +239,10 @@ public class KdTree {
             double ylb = 0;
             double yrt = 0;
             if (x.lb != null) {
-                ylb = Math.abs(x.p.y() - x.lb.p.y());
+                ylb = Math.abs(target.y() - x.lb.p.y());
             }
             if (x.rt != null) {
-                yrt = Math.abs(x.p.y() - x.rt.p.y());
+                yrt = Math.abs(target.y() - x.rt.p.y());
             }
 
             if (ylb < yrt) {
@@ -250,35 +258,35 @@ public class KdTree {
     }
 
     public static void main(String[] args) {
-        /** commented for submission
-         // initialize the data structures from file
-         String filename = args[0];
-         In in = new In(filename);
-         // PointSET brute = new PointSET();
-         KdTree tree = new KdTree();
-         while (!in.isEmpty()) {
-         double x = in.readDouble();
-         double y = in.readDouble();
-         Point2D p = new Point2D(x, y);
-         tree.insert(p);
-         StdOut.print("size:");
-         StdOut.println(tree.size());
-         StdOut.print("contains:");
-         StdOut.println(tree.contains(p));
-         StdOut.print("isEmpty:");
-         StdOut.println(tree.isEmpty());
-         }
+        ///** commented for submission
+        // initialize the data structures from file
+        String filename = args[0];
+        In in = new In(filename);
+        // PointSET brute = new PointSET();
+        KdTree tree = new KdTree();
+        while (!in.isEmpty()) {
+            double x = in.readDouble();
+            double y = in.readDouble();
+            Point2D p = new Point2D(x, y);
+            tree.insert(p);
+            StdOut.print("size:");
+            StdOut.println(tree.size());
+            StdOut.print("contains:");
+            StdOut.println(tree.contains(p));
+            StdOut.print("isEmpty:");
+            StdOut.println(tree.isEmpty());
+        }
 
-         // StdOut.println("size");
-         // StdOut.println(tree.size());
-         // StdOut.println("contains");
-         // StdOut.println(tree.contains(p4));
-         Point2D nearest = tree.nearest(new Point2D(0, 0));
-         StdOut.println(nearest.toString());
-         Point2D nearest2 = tree.nearest(new Point2D(1, 1));
-         StdOut.println(nearest2.toString());
-         tree.draw();
-         **/
+        // StdOut.println("size");
+        // StdOut.println(tree.size());
+        // StdOut.println("contains");
+        // StdOut.println(tree.contains(p4));
+        Point2D nearest = tree.nearest(new Point2D(0.54, 0.95));
+        StdOut.println(nearest.toString());
+        // Point2D nearest2 = tree.nearest(new Point2D(1, 1));
+        // StdOut.println(nearest2.toString());
+        // tree.draw();
+        // **/
 
     }
 
