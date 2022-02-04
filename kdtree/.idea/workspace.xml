@@ -43,11 +43,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
-  <component name="RunManager" selected="Application.NearestNeighborVisualizer">
+  <component name="RunManager" selected="Application.KdTree">
     <configuration name="KdTree" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="KdTree" />
       <module name="Algorithms, Part I" />
-      <option name="PROGRAM_PARAMETERS" value="vertical7.txt" />
+      <option name="PROGRAM_PARAMETERS" value="circle10.txt" />
       <method v="2" />
     </configuration>
     <configuration name="KdTreeVisualizer" type="Application" factoryName="Application">
@@ -59,13 +59,19 @@
     <configuration name="NearestNeighborVisualizer" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="NearestNeighborVisualizer" />
       <module name="Algorithms, Part I" />
-      <option name="PROGRAM_PARAMETERS" value="vertical7.txt" />
+      <option name="PROGRAM_PARAMETERS" value="circle1000.txt" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PointSET" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="PointSET" />
+      <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value="input10.txt" />
       <method v="2" />
     </configuration>
     <configuration name="RangeSearchVisualizer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RangeSearchVisualizer" />
       <module name="Algorithms, Part I" />
-      <option name="PROGRAM_PARAMETERS" value="vertical7.txt" />
+      <option name="PROGRAM_PARAMETERS" value="input10.txt" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -93,48 +99,37 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643492629736" />
-    <state width="1899" height="359" key="GridCell.Tab.0.bottom" timestamp="1643841709680">
+    <state width="1899" height="291" key="GridCell.Tab.0.bottom" timestamp="1643933800242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709680" />
-    <state width="1899" height="359" key="GridCell.Tab.0.center" timestamp="1643841709680">
+    <state width="1899" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643933800242" />
+    <state width="1899" height="291" key="GridCell.Tab.0.center" timestamp="1643933800242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709680" />
-    <state width="1899" height="359" key="GridCell.Tab.0.left" timestamp="1643841709679">
+    <state width="1899" height="291" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643933800242" />
+    <state width="1899" height="291" key="GridCell.Tab.0.left" timestamp="1643933800242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709679" />
-    <state width="1899" height="359" key="GridCell.Tab.0.right" timestamp="1643841709680">
+    <state width="1899" height="291" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643933800242" />
+    <state width="1899" height="291" key="GridCell.Tab.0.right" timestamp="1643933800242">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709680" />
-    <state width="1899" height="359" key="GridCell.Tab.1.bottom" timestamp="1643841709681">
+    <state width="1899" height="291" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643933800242" />
+    <state width="1899" height="359" key="GridCell.Tab.1.bottom" timestamp="1643851489060">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709681" />
-    <state width="1899" height="359" key="GridCell.Tab.1.center" timestamp="1643841709681">
+    <state width="1899" height="359" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643851489060" />
+    <state width="1899" height="359" key="GridCell.Tab.1.center" timestamp="1643851489059">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709681" />
-    <state width="1899" height="359" key="GridCell.Tab.1.left" timestamp="1643841709680">
+    <state width="1899" height="359" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643851489059" />
+    <state width="1899" height="359" key="GridCell.Tab.1.left" timestamp="1643851489059">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709680" />
-    <state width="1899" height="359" key="GridCell.Tab.1.right" timestamp="1643841709681">
+    <state width="1899" height="359" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643851489059" />
+    <state width="1899" height="359" key="GridCell.Tab.1.right" timestamp="1643851489059">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="359" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643841709681" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/KdTree.java</url>
-          <line>228</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state width="1899" height="359" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1643851489059" />
   </component>
 </project>
