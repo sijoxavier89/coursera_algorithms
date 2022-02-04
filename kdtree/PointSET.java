@@ -4,13 +4,11 @@
  *  Description: Represents the set of points in the unit square
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
 
 public class PointSET {
     private SET<Point2D> set;
@@ -86,29 +84,30 @@ public class PointSET {
     }
 
     public static void main(String[] args) {
+        /** commented for submission
+         // initialize the data structures from file
+         String filename = args[0];
+         In in = new In(filename);
+         PointSET brute = new PointSET();
 
-        // initialize the data structures from file
-        String filename = args[0];
-        In in = new In(filename);
-        PointSET brute = new PointSET();
+         while (!in.isEmpty()) {
+         double x = in.readDouble();
+         double y = in.readDouble();
+         Point2D p = new Point2D(x, y);
 
-        while (!in.isEmpty()) {
-            double x = in.readDouble();
-            double y = in.readDouble();
-            Point2D p = new Point2D(x, y);
+         brute.insert(p);
+         }
 
-            brute.insert(p);
-        }
-
-        StdOut.println("size");
-        StdOut.println(brute.size());
-        // StdOut.println("contains");
-        // StdOut.println(brute.contains(p4));
-        // Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
-        // StdOut.println(nearest.toString());
-        Point2D nearest2 = brute.nearest(new Point2D(1, 1));
-        StdOut.println(nearest2.toString());
-        brute.draw();
+         StdOut.println("size");
+         StdOut.println(brute.size());
+         // StdOut.println("contains");
+         // StdOut.println(brute.contains(p4));
+         // Point2D nearest = brute.nearest(new Point2D(0.6, 0.1));
+         // StdOut.println(nearest.toString());
+         Point2D nearest2 = brute.nearest(new Point2D(1, 1));
+         StdOut.println(nearest2.toString());
+         brute.draw();
+         **/
 
     }
 }

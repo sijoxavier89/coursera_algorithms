@@ -7,12 +7,10 @@
  *  Draw
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
 
 public class KdTree {
     private Node root;
@@ -66,8 +64,8 @@ public class KdTree {
     private void put(Point2D p) {
 
         if (p == null) throw new IllegalArgumentException("calls put() with a null key");
-
-        root = put(root, p, true, new RectHV(0, 0, 1, 1));
+        if (!contains(p))
+            root = put(root, p, true, new RectHV(0, 0, 1, 1));
 
     }
 
@@ -137,8 +135,10 @@ public class KdTree {
 
 
         if (cmp < 0) return get(x.lb, p, !dividebyX);
-        else return get(x.rt, p, !dividebyX);
-        // else return x.p;
+        else if (cmp > 0) return get(x.rt, p, !dividebyX);
+        else if (!x.p.equals(p)) return get(x.rt, p, !dividebyX);
+        else return x.p;
+
     }
 
     // draw all points to standard draw
@@ -246,33 +246,39 @@ public class KdTree {
                 nearest(x.lb, target, !dividebyX);
             }
         }
-        
+
     }
 
     public static void main(String[] args) {
-        // initialize the data structures from file
-        String filename = args[0];
-        In in = new In(filename);
-        // PointSET brute = new PointSET();
-        KdTree tree = new KdTree();
-        while (!in.isEmpty()) {
-            double x = in.readDouble();
-            double y = in.readDouble();
-            Point2D p = new Point2D(x, y);
-            tree.insert(p);
+        /** commented for submission
+         // initialize the data structures from file
+         String filename = args[0];
+         In in = new In(filename);
+         // PointSET brute = new PointSET();
+         KdTree tree = new KdTree();
+         while (!in.isEmpty()) {
+         double x = in.readDouble();
+         double y = in.readDouble();
+         Point2D p = new Point2D(x, y);
+         tree.insert(p);
+         StdOut.print("size:");
+         StdOut.println(tree.size());
+         StdOut.print("contains:");
+         StdOut.println(tree.contains(p));
+         StdOut.print("isEmpty:");
+         StdOut.println(tree.isEmpty());
+         }
 
-        }
-
-        StdOut.println("size");
-        StdOut.println(tree.size());
-        // StdOut.println("contains");
-        // StdOut.println(tree.contains(p4));
-        Point2D nearest = tree.nearest(new Point2D(0, 0));
-        StdOut.println(nearest.toString());
-        Point2D nearest2 = tree.nearest(new Point2D(1, 1));
-        StdOut.println(nearest2.toString());
-        tree.draw();
-
+         // StdOut.println("size");
+         // StdOut.println(tree.size());
+         // StdOut.println("contains");
+         // StdOut.println(tree.contains(p4));
+         Point2D nearest = tree.nearest(new Point2D(0, 0));
+         StdOut.println(nearest.toString());
+         Point2D nearest2 = tree.nearest(new Point2D(1, 1));
+         StdOut.println(nearest2.toString());
+         tree.draw();
+         **/
 
     }
 
