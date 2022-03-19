@@ -76,11 +76,9 @@ public class SxLockstepBFS {
 
                         // check if the vertex v1 already marked from w
                         currentDistV = distToV[v1] + distToW[v1];
-                        if (markedW[v1]) {
-                            if (currentDistV < shortestAncDist) {
-                                shortestAncDist = currentDistV;
-                                shortestAnc = v1;
-                            }
+                        if (markedW[v1] && (currentDistV < shortestAncDist)) {
+                            shortestAncDist = currentDistV;
+                            shortestAnc = v1;
                         }
 
                     }
@@ -100,11 +98,9 @@ public class SxLockstepBFS {
 
                             // check if the vertex v1 already marked from w
                             currentDistW = distToV[w1] + distToW[w1];
-                            if (markedV[w1]) {
-                                if (currentDistW < shortestAncDist) {
-                                    shortestAncDist = currentDistW;
-                                    shortestAnc = w1;
-                                }
+                            if (markedV[w1] && (currentDistW < shortestAncDist)) {
+                                shortestAncDist = currentDistW;
+                                shortestAnc = w1;
                             }
                         }
 
