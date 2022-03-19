@@ -9,9 +9,11 @@
 import edu.princeton.cs.algs4.Digraph;
 
 public class SAP {
+    private Digraph graph;
+
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
-
+        graph = G;
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
