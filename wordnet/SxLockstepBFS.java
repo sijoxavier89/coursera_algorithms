@@ -136,9 +136,9 @@ public class SxLockstepBFS {
         w.add(16);
         w.add(17);
         SxLockstepBFS bfs = new SxLockstepBFS(G, v, w);
-        StdOut.println("distance:");
-        StdOut.print(bfs.distance());
-        StdOut.println("ancestor:");
+        StdOut.print("distance:");
+        StdOut.println(bfs.distance());
+        StdOut.print("ancestor:");
         StdOut.print(bfs.ancestor());
     }
 }
