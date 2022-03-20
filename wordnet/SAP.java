@@ -18,6 +18,8 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
+        // validate 
+        
         return 0;
     }
 
