@@ -14,12 +14,12 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class SAP {
     private int V = -1;
-    private Digraph graph;
+    private SxLockstepBFS sxLockstepBFS;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
-        graph = G;
         V = G.V();
+        sxLockstepBFS = new SxLockstepBFS(G);
     }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
@@ -49,8 +49,8 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
-        SxLockstepBFS bfs = new SxLockstepBFS(graph, v, w);
-        return bfs.distance();
+        sxLockstepBFS.lockstepBFS(v, w);
+        return sxLockstepBFS.distance();
     }
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
@@ -58,8 +58,8 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
-        SxLockstepBFS bfs = new SxLockstepBFS(graph, v, w);
-        return bfs.ancestor();
+        sxLockstepBFS.lockstepBFS(v, w);
+        return sxLockstepBFS.ancestor();
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
@@ -67,8 +67,8 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
-        SxLockstepBFS bfs = new SxLockstepBFS(graph, v, w);
-        return bfs.distance();
+        sxLockstepBFS.lockstepBFS(v, w);
+        return sxLockstepBFS.distance();
 
     }
 
@@ -77,8 +77,8 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
-        SxLockstepBFS bfs = new SxLockstepBFS(graph, v, w);
-        return bfs.ancestor();
+        sxLockstepBFS.lockstepBFS(v, w);
+        return sxLockstepBFS.ancestor();
 
     }
 

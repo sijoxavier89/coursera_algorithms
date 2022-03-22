@@ -17,6 +17,8 @@ import edu.princeton.cs.algs4.StdOut;
  * This use lockstep BFS with exploring vertices from v and w
  * back and forth till it reaches the minimum distance between
  * two sources
+ * TODO clear existing arrays instead of creating new ones , for subsequent call
+ * on the same SxLockstepBFS object
  */
 public class SxLockstepBFS {
     private static final int INFINITY = Integer.MAX_VALUE;
@@ -26,30 +28,35 @@ public class SxLockstepBFS {
     private int[] distToW;      // distTo[v] = length of shortest s->v path
     private int shortestAncDist;
     private int shortestAnc;
+    private Digraph G;
+    private int V;
 
-    public SxLockstepBFS(Digraph G, Iterable<Integer> sourceV, Iterable<Integer> sourceW) {
-        markedV = new boolean[G.V()];
-        markedW = new boolean[G.V()];
-        distToV = new int[G.V()];
-        distToW = new int[G.V()];
+    public SxLockstepBFS(Digraph G) {
+        this.G = G;
+        this.V = G.V();
+        markedV = new boolean[V];
+        markedW = new boolean[V];
+        distToV = new int[V];
+        distToW = new int[V];
         shortestAncDist = INFINITY;
         shortestAnc = -1;
-        lockstepBFS(G, sourceV, sourceW);
+
 
     }
 
-    public SxLockstepBFS(Digraph G, Integer V, Integer W) {
-        markedV = new boolean[G.V()];
-        markedW = new boolean[G.V()];
-        distToV = new int[G.V()];
-        distToW = new int[G.V()];
+
+    private void initialize() {
+        markedV = new boolean[V];
+        markedW = new boolean[V];
+        distToV = new int[V];
+        distToW = new int[V];
         shortestAncDist = INFINITY;
         shortestAnc = -1;
-        lockstepBFS(G, V, W);
-
     }
 
-    private void lockstepBFS(Digraph G, Iterable<Integer> sourceV, Iterable<Integer> sourceW) {
+    public void lockstepBFS(Iterable<Integer> sourceV, Iterable<Integer> sourceW) {
+
+        initialize();
         Queue<Integer> qV = new Queue<Integer>();
         Queue<Integer> qW = new Queue<Integer>();
 
@@ -64,11 +71,12 @@ public class SxLockstepBFS {
             distToW[w] = 0;
             qW.enqueue(w);
         }
-        runBFS(G, qV, qW);
+        runBFS(qV, qW);
 
     }
 
-    private void lockstepBFS(Digraph G, int v, int w) {
+    public void lockstepBFS(int v, int w) {
+        initialize();
         Queue<Integer> qV = new Queue<Integer>();
         Queue<Integer> qW = new Queue<Integer>();
 
@@ -80,11 +88,11 @@ public class SxLockstepBFS {
         distToW[w] = 0;
         qW.enqueue(w);
 
-        runBFS(G, qV, qW);
+        runBFS(qV, qW);
 
     }
 
-    private void runBFS(Digraph G, Queue<Integer> qV, Queue<Integer> qW) {
+    private void runBFS(Queue<Integer> qV, Queue<Integer> qW) {
         // start exploring vertices
         int currentDistV = 0;
         int currentDistW = 0;
@@ -94,7 +102,7 @@ public class SxLockstepBFS {
                 int v = qV.dequeue();
                 for (int v1 : G.adj(v)) {
                     if (!markedV[v1]) {
-                        // edgeToV[v1] = v1;
+
                         distToV[v1] = distToV[v] + 1;
                         markedV[v1] = true;
                         qV.enqueue(v1);
@@ -116,7 +124,7 @@ public class SxLockstepBFS {
                 int w = qW.dequeue();
                 for (int w1 : G.adj(w)) {
                     if (!markedW[w1]) {
-                        // edgeToW[w1] = w1;
+
                         distToW[w1] = distToW[w] + 1;
                         markedW[w1] = true;
                         qW.enqueue(w1);
@@ -165,7 +173,8 @@ public class SxLockstepBFS {
          **/
         StdOut.println("digraph1 3 11");
 
-        SxLockstepBFS bfs = new SxLockstepBFS(G, 3, 11);
+        SxLockstepBFS bfs = new SxLockstepBFS(G);
+        bfs.lockstepBFS(3, 11);
         StdOut.print("distance:");
         StdOut.println(bfs.distance());
         StdOut.print("ancestor:");
@@ -173,27 +182,27 @@ public class SxLockstepBFS {
 
         StdOut.println("digraph1 9 12");
 
-        SxLockstepBFS bfs1 = new SxLockstepBFS(G, 9, 12);
         StdOut.print("distance:");
-        StdOut.println(bfs1.distance());
+        bfs.lockstepBFS(9, 12);
+        StdOut.println(bfs.distance());
         StdOut.print("ancestor:");
-        StdOut.println(bfs1.ancestor());
+        StdOut.println(bfs.ancestor());
 
         StdOut.println("digraph1 7 2");
 
-        SxLockstepBFS bfs2 = new SxLockstepBFS(G, 7, 2);
+        bfs.lockstepBFS(7, 2);
         StdOut.print("distance:");
-        StdOut.println(bfs2.distance());
+        StdOut.println(bfs.distance());
         StdOut.print("ancestor:");
-        StdOut.println(bfs2.ancestor());
+        StdOut.println(bfs.ancestor());
 
         StdOut.println("digraph1 1 6");
 
-        SxLockstepBFS bfs3 = new SxLockstepBFS(G, 1, 6);
+        bfs.lockstepBFS(1, 6);
         StdOut.print("distance:");
-        StdOut.println(bfs3.distance());
+        StdOut.println(bfs.distance());
         StdOut.print("ancestor:");
-        StdOut.println(bfs3.ancestor());
+        StdOut.println(bfs.ancestor());
 
     }
 }
