@@ -130,7 +130,7 @@ public class WordNet {
                 countRoot += 1;
             if (countRoot > 1) throw new IllegalArgumentException(" not a rooted DAG");
         }
-
+        if (countRoot == 0) throw new IllegalArgumentException(" not a rooted DAG");
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
@@ -150,9 +150,13 @@ public class WordNet {
 
     // do unit testing of this class
     public static void main(String[] args) {
-        WordNet wn = new WordNet(args[0], args[1]);
-        StdOut.println("enter two nouns");
+        StdOut.println("enter synset and hypernyms");
         while (!StdIn.isEmpty()) {
+
+            String synset = StdIn.readLine();
+            String hypernym = StdIn.readLine();
+            WordNet wn = new WordNet(synset, hypernym);
+            StdOut.println("enter two nouns");
             String nounA = StdIn.readLine();
             String nounB = StdIn.readLine();
             StdOut.println("SAP:");
