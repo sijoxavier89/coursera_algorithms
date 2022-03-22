@@ -87,7 +87,7 @@ public class SxLockstepBFS {
         markedW[w] = true;
         distToW[w] = 0;
         qW.enqueue(w);
-
+       
         runBFS(qV, qW);
 
     }

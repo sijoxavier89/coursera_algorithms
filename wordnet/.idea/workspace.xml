@@ -74,7 +74,13 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
-  <component name="RunManager" selected="Application.WordNet">
+  <component name="RunManager" selected="Application.SAP">
+    <configuration name="SAP" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="SAP" />
+      <module name="Algorithms, Part II" />
+      <option name="PROGRAM_PARAMETERS" value="digraph1.txt" />
+      <method v="2" />
+    </configuration>
     <configuration name="SxLockstepBFS" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="SxLockstepBFS" />
       <module name="Algorithms, Part II" />
@@ -121,22 +127,22 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state width="411" height="466" key="DebuggerActiveHint/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647809174470" />
-    <state width="1899" height="288" key="GridCell.Tab.0.bottom" timestamp="1647922186955">
+    <state width="1899" height="288" key="GridCell.Tab.0.bottom" timestamp="1647925875804">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1899" height="288" key="GridCell.Tab.0.bottom/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647922186955" />
-    <state width="1899" height="288" key="GridCell.Tab.0.center" timestamp="1647922186955">
+    <state width="1899" height="288" key="GridCell.Tab.0.bottom/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647925875804" />
+    <state width="1899" height="288" key="GridCell.Tab.0.center" timestamp="1647925875803">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1899" height="288" key="GridCell.Tab.0.center/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647922186955" />
-    <state width="1899" height="288" key="GridCell.Tab.0.left" timestamp="1647922186955">
+    <state width="1899" height="288" key="GridCell.Tab.0.center/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647925875803" />
+    <state width="1899" height="288" key="GridCell.Tab.0.left" timestamp="1647925875803">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1899" height="288" key="GridCell.Tab.0.left/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647922186954" />
-    <state width="1899" height="288" key="GridCell.Tab.0.right" timestamp="1647922186955">
+    <state width="1899" height="288" key="GridCell.Tab.0.left/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647925875803" />
+    <state width="1899" height="288" key="GridCell.Tab.0.right" timestamp="1647925875804">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state width="1899" height="288" key="GridCell.Tab.0.right/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647922186955" />
+    <state width="1899" height="288" key="GridCell.Tab.0.right/0.0.1920.1032/-1920.0.1920.1032@0.0.1920.1032" timestamp="1647925875804" />
     <state width="1899" height="356" key="GridCell.Tab.1.bottom" timestamp="1647915985675">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>

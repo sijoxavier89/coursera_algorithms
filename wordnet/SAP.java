@@ -5,6 +5,7 @@
  * Performance requirements.  All methods (and the constructor) should take time at most proportional to E + V in the worst case,
  *  where E and V are the number of edges and vertices in the digraph, respectively. Your data type should use space proportional to E + V.
  * TODO: cache result for length and ancestor
+ * TODO: find a way to return common ancestor when there is common vertex in both argument list
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.Digraph;
@@ -15,23 +16,27 @@ import edu.princeton.cs.algs4.StdOut;
 public class SAP {
     private int V = -1;
     private SxLockstepBFS sxLockstepBFS;
+    private Digraph graph;
 
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
-        V = G.V();
-        sxLockstepBFS = new SxLockstepBFS(G);
+        graph = new Digraph(G);
+        V = graph.V();
+        sxLockstepBFS = new SxLockstepBFS(graph);
     }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(Integer v) {
         if (v == null)
-            throw new IllegalArgumentException("vertex " + v + " is null ");
+            throw new IllegalArgumentException("argument is null");
         if (v < 0 || v >= V)
             throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
     }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(Iterable<Integer> v) {
+        if (v == null) throw new IllegalArgumentException("argument is null ");
+
         for (Integer w : v) {
             if (w == null)
                 throw new IllegalArgumentException("vertex " + v + " is null ");
@@ -49,6 +54,7 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
+        if (v == w) return 0;
         sxLockstepBFS.lockstepBFS(v, w);
         return sxLockstepBFS.distance();
     }
@@ -58,6 +64,7 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
+        if (v == w) return v;
         sxLockstepBFS.lockstepBFS(v, w);
         return sxLockstepBFS.ancestor();
     }
@@ -67,6 +74,7 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
+
         sxLockstepBFS.lockstepBFS(v, w);
         return sxLockstepBFS.distance();
 
@@ -77,6 +85,7 @@ public class SAP {
         // validate
         validateVertex(v);
         validateVertex(w);
+
         sxLockstepBFS.lockstepBFS(v, w);
         return sxLockstepBFS.ancestor();
 
