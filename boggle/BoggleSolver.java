@@ -1,9 +1,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /*
 Plan: create DFS to search through the board
@@ -14,7 +12,6 @@ add it to the result
  */
 public class BoggleSolver {
 
-    private HashSet<String> dict;
     private HashMap<String, Integer> result;
     private int maxRowSize = 0;
     private int maxColSize = 0;
@@ -24,10 +21,8 @@ public class BoggleSolver {
     // Initializes the data structure using the given array of strings as the dictionary.
     // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
     public BoggleSolver(String[] dictionary) {
-
-        dict = new HashSet<String>();
-        Collections.addAll(dict, dictionary);
         trie = new TrieSx(dictionary);
+        result = new HashMap<>();
     }
 
     private void resetVisited() {
@@ -40,7 +35,8 @@ public class BoggleSolver {
 
     // Returns the set of all valid words in the given Boggle board, as an Iterable.
     public Iterable<String> getAllValidWords(BoggleBoard board) {
-        result = new HashMap<>();
+        // clear previous results
+        result.clear();
         maxRowSize = board.rows() - 1;
         maxColSize = board.cols() - 1;
         visited = new boolean[maxRowSize + 1][maxColSize + 1];
@@ -107,10 +103,39 @@ public class BoggleSolver {
     // Returns the score of the given word if it is in the dictionary, zero otherwise.
     // (You can assume the word contains only the uppercase letters A through Z.)
     public int scoreOf(String word) {
-        return result.get(word);
+        if (result.containsKey(word))
+            return result.get(word);
+        else return 0;
     }
 
     public static void main(String[] args) {
+        
+        String filename = "board-points";
+        String dictname = "dictionary-yawl.txt";
+        String[] points = new String[] {
+                "0", "1", "2", "3", "4", "5", "100", "200", "300", "400", "500",
+                "750", "777", "1000", "1111", "1250", "2000", "4410", "4527", "4540", "13464",
+                "26539"
+        };
+        for (String s : points) {
+            In in = new In(dictname);
+            String[] dictionary = in.readAllStrings();
+            BoggleSolver solver = new BoggleSolver(dictionary);
+            BoggleBoard board = new BoggleBoard(filename + s + ".txt");
+            int score = 0;
+
+            for (
+                    String word : solver.getAllValidWords(board)) {
+                // StdOut.println(word);
+                score += solver.scoreOf(word);
+            }
+            StdOut.println("Score = " + score);
+            if (Integer.parseInt(s) == score)
+                StdOut.println("PASSED : " + score);
+            else
+                StdOut.println("FAILED : " + score);
+        } 
+        /*
         In in = new In(args[0]);
         String[] dictionary = in.readAllStrings();
         BoggleSolver solver = new BoggleSolver(dictionary);
@@ -120,7 +145,10 @@ public class BoggleSolver {
             StdOut.println(word);
             score += solver.scoreOf(word);
         }
-        StdOut.println("Score = " + score);
+        StdOut.println("Score = " + score);*/
+
+
     }
+
 
 }
