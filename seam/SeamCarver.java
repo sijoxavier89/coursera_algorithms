@@ -2,10 +2,7 @@
  *  Name: Sijo Xavier
  *  Date: 08/21/2022
  *  Description: Seam Carver
- * TODO : avoid trasnposing energy unnecessery
- * TODO: use system.arraycopy, use int[][] for picture
- * TODO: recalculate energy for affected cells without transpose
- * TODO: use column major for finding the seams
+ * TODO : array out of bound exception, wrong exception for invalid seam
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.Picture;
@@ -15,7 +12,6 @@ public class SeamCarver {
     private double[][] energy;
     private int width;
     private int height;
-    private boolean hseam = false;
     private int[][] pixels;    // 2d array of rgb values representing the picture
     private boolean transposed = false;
     private boolean eTransposed = false;
@@ -55,7 +51,6 @@ public class SeamCarver {
     }
 
     // current picture
-    // todo : get clone of current picture
     public Picture picture() {
         return clonePicture();
     }
@@ -154,12 +149,11 @@ public class SeamCarver {
 
 
     private boolean isBorder(int x, int y, int wid, int hi) {
-        return (x == 0 || y == 0 || x == wid - 1 || y == hi - 1);
+        return (x == 0 || y == 0 || x >= wid - 1 || y >= hi - 1);
     }
 
     // sequence of indices for horizontal seam
     public int[] findHorizontalSeam() {
-        hseam = true;
         if (!transposed) {
             pixels = transpose(pixels);
             transposed = true;
@@ -177,7 +171,6 @@ public class SeamCarver {
 
     // sequence of indices for vertical seam
     public int[] findVerticalSeam() {
-        hseam = false;
         // if the picture is already transposed
         // bring it back to original shape
         if (transposed) {
@@ -193,67 +186,72 @@ public class SeamCarver {
     }
 
     private int[] findSeam(int heightP, int widthP) {
-        double[][] distTo = new double[heightP][widthP];
-        int[][] edgeTo = new int[heightP][widthP];
+        if (heightP > 1) {
+            double[][] distTo = new double[heightP][widthP];
+            int[][] edgeTo = new int[heightP][widthP];
 
-        // initialize distTo for not visited vertices to
-        // positive infinity
+            // initialize distTo for not visited vertices to
+            // positive infinity
 
-        for (int row = 0; row < heightP; row++) {
-            for (int col = 0; col < widthP; col++) {
-                distTo[row][col] = Double.POSITIVE_INFINITY;
-            }
-        }
-
-        // initialize first row to zero
-        for (int col = 0; col < widthP; col++) {
-            distTo[0][col] = 1000.00;
-        }
-
-        // initialize edgeTo
-        // initialize first row to same row
-        for (int col = 0; col < widthP; col++) {
-            edgeTo[0][col] = col;
-        }
-
-        double minenergy = Double.MAX_VALUE;
-        int minX = -1;
-        for (int row = 1; row < heightP; row++) {
-            for (int col = 0; col < widthP; col++) {
-                // upper left
-                if (col > 0) {
-                    relax(row - 1, col - 1, row, col, distTo, edgeTo);
-                }
-
-                // upper
-                relax(row - 1, col, row, col, distTo, edgeTo);
-
-                // upper right
-                if (col < widthP - 1) {
-                    relax(row - 1, col + 1, row, col, distTo, edgeTo);
-                }
-
-                // check for min energy seam in the bottom row
-                if (row == heightP - 1 && distTo[row][col] < minenergy) {
-                    minenergy = distTo[row][col];
-                    minX = col;
+            for (int row = 0; row < heightP; row++) {
+                for (int col = 0; col < widthP; col++) {
+                    distTo[row][col] = Double.POSITIVE_INFINITY;
                 }
             }
 
+            // initialize first row to zero
+            for (int col = 0; col < widthP; col++) {
+                distTo[0][col] = 1000.00;
+            }
 
-        }
-        // backtrack the vertices from the last row
-        int[] seam = new int[heightP];
-        int h = heightP - 1;
-        int xindex = minX;
-        seam[h] = xindex;
-        while (h >= 1) {
+            // initialize edgeTo
+            // initialize first row to same row
+            for (int col = 0; col < widthP; col++) {
+                edgeTo[0][col] = col;
+            }
 
-            xindex = edgeTo[h][xindex];
-            seam[h - 1] = xindex;
-            h -= 1;
+            double minenergy = Double.POSITIVE_INFINITY;
+            int minX = -1;
+            for (int row = 1; row < heightP; row++) {
+                for (int col = 0; col < widthP; col++) {
+                    // upper left
+                    if (col > 0) {
+                        relax(row - 1, col - 1, row, col, distTo, edgeTo);
+                    }
+
+                    // upper
+                    relax(row - 1, col, row, col, distTo, edgeTo);
+
+                    // upper right
+                    if (col < widthP - 1) {
+                        relax(row - 1, col + 1, row, col, distTo, edgeTo);
+                    }
+
+                    // check for min energy seam in the bottom row
+                    if (row == heightP - 1 && distTo[row][col] < minenergy) {
+                        minenergy = distTo[row][col];
+                        minX = col;
+                    }
+                }
+
+
+            }
+            // backtrack the vertices from the last row
+            int[] seam = new int[heightP];
+            int h = heightP - 1;
+            int xindex = minX;
+            seam[h] = xindex;
+            while (h >= 1) {
+
+                xindex = edgeTo[h][xindex];
+                seam[h - 1] = xindex;
+                h -= 1;
+            }
+            return seam;
         }
-        return seam;
+        else {
+            return new int[] { 0 };
+        }
     }
 
     // relax the edges
@@ -298,11 +296,9 @@ public class SeamCarver {
     }
 
     // remove horizontal seam from current picture
-    // TODO:optimize and correct the output;
     public void removeHorizontalSeam(int[] seam) {
-        if (seam == null) throw new IllegalArgumentException(" input seam is null");
-        if (height <= 1) throw new IllegalArgumentException("height is less");
 
+        validateHSeam(seam);
         if (!transposed) {
             pixels = transpose(pixels);
             transposed = true;
@@ -323,8 +319,7 @@ public class SeamCarver {
 
     // remove vertical seam from current picture
     public void removeVerticalSeam(int[] seam) {
-        if (seam == null) throw new IllegalArgumentException(" input seam is null");
-        if (width <= 1) throw new IllegalArgumentException("width is less");
+        validateVSeam(seam);
 
         if (transposed) {
             pixels = transpose(pixels);
@@ -391,7 +386,38 @@ public class SeamCarver {
         }
     }
 
+    private void validateVSeam(int[] seam) {
+
+        if (seam == null) throw new IllegalArgumentException(" input seam is null");
+        if (width <= 1) throw new IllegalArgumentException("width is less");
+        if (seam.length != height) throw new IllegalArgumentException("invalid seam");
+        for (int i = 0; i < seam.length; i++) {
+            int col = seam[i];
+            if (col < 0 || col >= width) throw new IllegalArgumentException("invalid seam");
+            if (i > 0) {
+                int diff = Math.abs(col - seam[i - 1]);
+                if (diff > 1) throw new IllegalArgumentException("invalid seam");
+            }
+        }
+    }
+
+    private void validateHSeam(int[] seam) {
+        if (seam == null) throw new IllegalArgumentException(" input seam is null");
+        if (height <= 1) throw new IllegalArgumentException("height is less");
+        if (seam.length != width) throw new IllegalArgumentException("invalid seam");
+        for (int i = 0; i < seam.length; i++) {
+            int row = seam[i];
+            if (row < 0 || row >= height) throw new IllegalArgumentException("invalid seam");
+            if (i > 0) {
+                int diff = Math.abs(row - seam[i - 1]);
+                if (diff > 1) throw new IllegalArgumentException("invalid seam");
+            }
+        }
+    }
+
     private void shiftLeft(int col, int row, int wid) {
+
+
         if (col == wid - 1) {
             pixels[row][col] = 0;
         }
@@ -430,7 +456,7 @@ public class SeamCarver {
      *
      * @return the green component.
      */
-    public int getGreen(int rgb) {
+    private int getGreen(int rgb) {
         return (rgb >> 8) & 0xFF;
     }
 
@@ -440,7 +466,7 @@ public class SeamCarver {
      *
      * @return the blue component.
      */
-    public int getBlue(int rgb) {
+    private int getBlue(int rgb) {
         return (rgb) & 0xFF;
     }
 
