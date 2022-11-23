@@ -73,11 +73,11 @@ public class BurrowsWheeler {
         int len = 0;
         char[] aux = null;
         int[] next = null;
+        int first = 0;
         while (!BinaryStdIn.isEmpty()) {
-            int first = BinaryStdIn.readInt();
+            first = BinaryStdIn.readInt();
 
             String input = BinaryStdIn.readString();
-            // StdOut.println(input);
             len = input.length();
             next = new int[len];
             int[] count = new int[R + 1];
@@ -94,28 +94,20 @@ public class BurrowsWheeler {
             // first character for the sorted suffixes
             aux = new char[len];
             for (int i = 0; i < len; i++) {
-                aux[count[input.charAt(i)]++] = input.charAt(i);
-            }
+                next[count[input.charAt(i)]] = i;
+                aux[count[input.charAt(i)]] = input.charAt(i);
+                count[input.charAt(i)]++;
 
-            int[] check = new int[R];
-            for (int k = 0; k < len; k++) {
-                for (int start = check[aux[k]]; start < len; start++) {
-                    if (aux[k] == input.charAt(start)) {
-                        next[k] = start;
-                        check[aux[k]] = start + 1;
-                        break;
-                    }
-                }
             }
-
+            
         }
 
 
         // output
-        int nextIndex = 0;
+        int nextIndex = first;
         int n = 0;
         while (n < len) {
-            BinaryStdOut.write(aux[next[nextIndex]]);
+            BinaryStdOut.write(aux[nextIndex]);
             nextIndex = next[nextIndex];
             n++;
         }

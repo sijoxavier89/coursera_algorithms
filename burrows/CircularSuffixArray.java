@@ -35,6 +35,9 @@ public class CircularSuffixArray {
 
     // circular suffix array of s
     public CircularSuffixArray(String s) {
+
+        if (s == null) throw new IllegalArgumentException();
+
         len = s.length();
         char[] arr = s.toCharArray();
 
@@ -44,12 +47,6 @@ public class CircularSuffixArray {
         }
 
         Collections.sort(sorted);
-        // Test sorting
-        /*
-        for (CircularSuffix item : sorted) {
-            String i = new String(item.getRotatedStr());
-            StdOut.println(i + "-" + item.startIndex);
-        }*/
 
         // create sorted suffix index map
         sortedSuffix = new int[len];
